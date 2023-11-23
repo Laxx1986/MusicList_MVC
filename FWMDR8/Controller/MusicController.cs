@@ -28,7 +28,8 @@ namespace FWMDR8.Controller
 
         public bool ModifyMusic(Music music)
         {
-            return dao.ModifyMusic(music);
+            var dao2 = new MusicDao();
+            return dao2.ModifyMusic(music);
         }
 
         public bool AddMusic(Music music)

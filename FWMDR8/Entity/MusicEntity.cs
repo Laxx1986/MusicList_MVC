@@ -6,19 +6,33 @@ namespace FWMDR8.Entity
     {
         public int ID { get; set; }
         // Nem lehet üres és egyedi
-        public string title;
+        public string title { get; set; }
 
         //Nem lehet üres
-        public string performer;
+        public string performer { get; set; }
 
         //Nem lehet negatív
-        public int release_date;
+        public int release_date { get; set; }
 
         //Nem lehet negatív
-        public int music_length;
+        public int music_length { get; set; }
 
         //Nem lehet negatív
-        public int priority;
+        public int priority { get; set; }
+
+        public Music(Music other)
+        {
+            ID = other.ID;
+            title = other.title;
+            performer = other.performer;
+            release_date = other.release_date;
+            music_length = other.music_length;
+            priority = other.priority;
+        }
+
+        public Music()
+        {
+        }
 
         public string GetTitle() { return title; }
         public void SetTitle(string _title)

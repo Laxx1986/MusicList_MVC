@@ -1,6 +1,5 @@
 using FWMDR8.Controller;
 using FWMDR8.Entity;
-using FWMDR8.ViewModels;
 using FWMDR8.Dao;
 
 namespace FWMDR8
@@ -33,16 +32,19 @@ namespace FWMDR8
             button1.Visible = true;
             var music = musicController.GetMusic();
 
-            var viewModels = new List<MusicViewModel>();
+            var viewModels = new List<Music>();
 
             foreach (var item in music)
             {
-                viewModels.Add(new MusicViewModel(item));
+                viewModels.Add(new Music(item));
             }
 
             musicGridView.DataSource = null;
             musicGridView.DataSource = viewModels;
             musicGridView.Visible = true;
+
+            musicGridView.Columns["ID"].Visible = false;
+            musicGridView.Columns["priority"].Visible = false;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -59,10 +61,11 @@ namespace FWMDR8
 
         private void musicGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-
-
             if (!(musicGridView.CurrentRow.DataBoundItem is Music music))
+            {
+
                 return;
+            }
 
             var Form2 = new Form2(musicController, music);
             MessageBox.Show("musicGridView_CellContentClick executed!");

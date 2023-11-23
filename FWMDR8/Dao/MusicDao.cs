@@ -70,12 +70,38 @@ namespace FWMDR8.Dao
             }
 
             music.Sort((p1, p2) => p1.priority.CompareTo(p2.priority));
+
             return music;
         }
 
         public bool ModifyMusic(Music music)
         {
-            throw new NotImplementedException();
+            using SqliteConnection conn = new SqliteConnection(conn_string);
+            conn.Open();
+            SqliteCommand cmd = conn.CreateCommand();
+            cmd.CommandText = "UPDATE music SET " +
+                "title=@title, performer=@performer, release_date=@release_date, music_length=@music_length, priority=@priority " +
+                "WHERE ID=@id;";
+
+
+            cmd.Parameters.Add("id", (SqliteType)System.Data.DbType.Int32).Value = music.ID;
+            cmd.Parameters.Add("title", (SqliteType)System.Data.DbType.String).Value = music.title;
+            cmd.Parameters.Add("performer", (SqliteType)System.Data.DbType.String).Value = music.performer;
+            cmd.Parameters.Add("release_date", (SqliteType)System.Data.DbType.Int32).Value = music.release_date;
+            cmd.Parameters.Add("music_length", (SqliteType)System.Data.DbType.Int32).Value = music.music_length;
+            cmd.Parameters.Add("priority", (SqliteType)System.Data.DbType.Int32).Value = music.priority;
+
+
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+            conn.Close();
+            return true;
         }
     }
 }
