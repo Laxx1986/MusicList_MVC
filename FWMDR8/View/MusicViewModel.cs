@@ -4,11 +4,12 @@ namespace FWMDR8.ViewModels
 {
     public class MusicViewModel
     {
+
         public string Title { get; set; }
         public string Performer { get; set; }
-        public ushort ReleaseDate { get; set; }
-        public ushort MusicLength { get; set; }
-        public byte Priority { get; set; }
+        public int ReleaseDate { get; set; }
+        public int MusicLength { get; set; }
+
 
         public MusicViewModel(Music music)
         {
@@ -16,7 +17,6 @@ namespace FWMDR8.ViewModels
             Performer = music.GetPerformer();
             ReleaseDate = music.GetReleaseDate();
             MusicLength = music.GetMusicLength();
-            Priority = (byte)music.GetPriority();
         }
     }
 }

@@ -22,7 +22,8 @@ namespace FWMDR8.Controller
 
         public IEnumerable<Music> GetMusic()
         {
-            return dao.GetMusic();
+            var dao2 = new MusicDao();
+            return dao2.GetMusic();
         }
 
         public bool ModifyMusic(Music music)
@@ -32,9 +33,8 @@ namespace FWMDR8.Controller
 
         public bool AddMusic(Music music)
         {
-
-            MessageBox.Show("Controller" + music.GetTitle() + " " + music.GetPerformer() + " " + music.GetReleaseDate() + " " + music.GetMusicLength() + " " + music.GetPriority());
-            return dao.AddMusic(music);
+            var dao2 = new MusicDao();
+            return dao2.AddMusic(music);
         }
     }
 }

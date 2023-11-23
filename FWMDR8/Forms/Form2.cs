@@ -1,4 +1,5 @@
 ﻿using FWMDR8.Controller;
+using FWMDR8.Dao;
 using FWMDR8.Entity;
 using System;
 using System.Collections.Generic;
@@ -14,15 +15,30 @@ namespace FWMDR8
 {
     public partial class Form2 : Form
     {
-        MusicController musicController = new MusicController();
+        private readonly MusicController musicController = new MusicController();
+        private readonly int Id;
+        private readonly bool IsModification = false;
 
 
-
-        public Form2()
+        public Form2(MusicController controller)
         {
 
             InitializeComponent();
+            this.musicController = controller;
 
+        }
+
+        public Form2(MusicController controller, Music music)
+        {
+            InitializeComponent();
+            IsModification = true;
+            Id = music.ID;
+            musicTitleBox.Text = music.title;
+            performerNameBox.Text = music.performer;
+            releaseDateBox.Text = ""+music.release_date;
+            musicLengthBox.Text = "" + music.music_length;
+            priorityBox.Text = "" + music.priority;
+            saveButton.Text = "Modify";
         }
 
 
@@ -37,14 +53,49 @@ namespace FWMDR8
 
             string title = musicTitleBox.Text;
             string performer = performerNameBox.Text;
-            ushort release_date;
-            ushort music_length;
-            byte priority;
-            if (ushort.TryParse(releaseDateBox.Text, out release_date)) { }
+            int release_date;
+            int music_length;
+            int priority;
 
-            if (ushort.TryParse(musicLengthBox.Text, out music_length)) { }
+            if (!int.TryParse(releaseDateBox.Text, out release_date)) {
+                MessageBox.Show("A release date csak szám lehet!", "Hiba!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DialogResult = DialogResult.Abort;
+                return;
+            }
 
-            if (byte.TryParse(priorityBox.Text, out priority)) { }
+            if (!int.TryParse(musicLengthBox.Text, out music_length)) {
+
+                MessageBox.Show("A zene hossza csak szám lehet!", "Hiba!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DialogResult = DialogResult.Abort;
+                return;
+            }
+
+            if (!int.TryParse(priorityBox.Text, out priority)) {
+
+                MessageBox.Show("A prioritás csak szám lehet!", "Hiba!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DialogResult = DialogResult.Abort;
+                return;
+            }
+            if (title == string.Empty || performer == string.Empty)
+            {
+                MessageBox.Show("Kötelező megadni a zene címét és az előadót", "Hiba!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DialogResult = DialogResult.Abort;
+                return;
+            }
+
+            if ((release_date < 1900) || (release_date > 2023))
+            {
+                MessageBox.Show("A release date 1900 és 2023 közé kell essen!", "Hiba!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DialogResult = DialogResult.Abort;
+                return;
+            }
+
+            if (music_length < 0 || priority < 0)
+            {
+                MessageBox.Show("Negatív számot nem lehet megadni", "Hiba!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DialogResult = DialogResult.Abort;
+                return;
+            }
 
             Music music = new Music();
             music.SetTitle(title);
@@ -53,9 +104,16 @@ namespace FWMDR8
             music.SetMusicLength(music_length);
             music.SetPriority(priority);
 
+            if (IsModification)
+            {
+                music.ID = Id;
+                musicController.ModifyMusic(music);
+            } else 
+            { 
+                musicController.AddMusic(music);
+            }
 
-
-            musicController.AddMusic(music);
+            
             this.Close();
         }
     }

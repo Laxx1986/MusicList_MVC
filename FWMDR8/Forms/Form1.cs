@@ -1,21 +1,24 @@
 using FWMDR8.Controller;
+using FWMDR8.Entity;
 using FWMDR8.ViewModels;
+using FWMDR8.Dao;
 
 namespace FWMDR8
 {
     public partial class Form1 : Form
     {
-        MusicController musicController = new MusicController();
+        private readonly MusicController musicController;
         public Form1()
         {
             InitializeComponent();
+            musicController = new MusicController(new MusicDao());
         }
 
 
 
         private void újZeneHozzáadásaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var Form2 = new Form2();
+            var Form2 = new Form2(musicController);
             Form2.Show();
         }
 
@@ -24,18 +27,12 @@ namespace FWMDR8
 
         }
 
-        private void modifyMusicToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var Form2 = new Form2();
-            Form2.Show();
-        }
-
         private void browsingToolStripMenuItem_Click(object sender, EventArgs e)
         {
             musicGridView.Visible = true;
             button1.Visible = true;
             var music = musicController.GetMusic();
-            //TODO: Ez tuti nem jó így, még utána járni
+
             var viewModels = new List<MusicViewModel>();
 
             foreach (var item in music)
@@ -56,8 +53,21 @@ namespace FWMDR8
 
         private void button2_Click(object sender, EventArgs e)
         {
-            var Form2 = new Form2();
+            var Form2 = new Form2(musicController);
             Form2.Show();
+        }
+
+        private void musicGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+
+            if (!(musicGridView.CurrentRow.DataBoundItem is Music music))
+                return;
+
+            var Form2 = new Form2(musicController, music);
+            MessageBox.Show("musicGridView_CellContentClick executed!");
+            Form2.ShowDialog();
+
         }
     }
 }

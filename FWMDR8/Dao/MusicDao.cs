@@ -11,10 +11,9 @@ namespace FWMDR8.Dao
 {
     public class MusicDao : IMusicDao
     {
-        private static readonly string conn_string = @"Data source = ..\..\..\..\..\..\..\db\music.db;";
+        private static readonly string conn_string = @"Data source = C:\Users\lszen\source\repos\FWMDR8\FWMDR8\db\music.db;";
         public bool AddMusic(Music music)
         {
-            MessageBox.Show("Dao1");
             using SqliteConnection conn = new SqliteConnection(conn_string);
             conn.Open();
             SqliteCommand cmd = conn.CreateCommand();
@@ -28,7 +27,6 @@ namespace FWMDR8.Dao
             cmd.Parameters.Add("music_length", (SqliteType)System.Data.DbType.Int32).Value = music.music_length;
             cmd.Parameters.Add("priority", (SqliteType)System.Data.DbType.Int32).Value = music.priority;
 
-            MessageBox.Show("Dao2");
 
             try
             {
@@ -39,7 +37,6 @@ namespace FWMDR8.Dao
                 return false;
             }
             conn.Close();
-            MessageBox.Show("Dao3");
             return true;
         }
 
@@ -50,7 +47,30 @@ namespace FWMDR8.Dao
 
         public IEnumerable<Music> GetMusic()
         {
-            throw new NotImplementedException();
+            List<Music> music = new List<Music>();
+            using SqliteConnection conn = new SqliteConnection(conn_string);
+            conn.Open();
+            SqliteCommand command = conn.CreateCommand();
+            command.CommandText = "SELECT * FROM music";
+
+            using SqliteDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                music.Add(
+                    new Music
+                    {
+                        ID = reader.GetInt32(reader.GetOrdinal("ID")),
+                        title = reader.GetString(reader.GetOrdinal("Title")),
+                        performer = reader.GetString(reader.GetOrdinal("Performer")),
+                        release_date = reader.GetInt32(reader.GetOrdinal("Release_date")),
+                        music_length = reader.GetInt32(reader.GetOrdinal("Music_length")),
+                        priority = reader.GetInt32(reader.GetOrdinal("Priority"))
+                    }
+                );
+            }
+
+            music.Sort((p1, p2) => p1.priority.CompareTo(p2.priority));
+            return music;
         }
 
         public bool ModifyMusic(Music music)
