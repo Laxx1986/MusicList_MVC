@@ -34,9 +34,13 @@ namespace FWMDR8
             IsModification = true;
             Id = music.ID;
             musicTitleBox.Text = music.title;
+            musicTitleBox.ReadOnly = true;
             performerNameBox.Text = music.performer;
+            performerNameBox.ReadOnly = true;
             releaseDateBox.Text = ""+music.release_date;
+            releaseDateBox.ReadOnly = true;
             musicLengthBox.Text = "" + music.music_length;
+            musicLengthBox.ReadOnly = true;
             priorityBox.Text = "" + music.priority;
             saveButton.Text = "Modify";
         }

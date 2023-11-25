@@ -11,7 +11,7 @@ namespace FWMDR8.Dao
 {
     public class MusicDao : IMusicDao
     {
-        private static readonly string conn_string = @"Data source = C:\Users\lszen\source\repos\FWMDR8\FWMDR8\db\music.db;";
+        private static readonly string conn_string = @"Data source = ../../../db/music.db;";
         public bool AddMusic(Music music)
         {
             using SqliteConnection conn = new SqliteConnection(conn_string);
@@ -80,15 +80,9 @@ namespace FWMDR8.Dao
             conn.Open();
             SqliteCommand cmd = conn.CreateCommand();
             cmd.CommandText = "UPDATE music SET " +
-                "title=@title, performer=@performer, release_date=@release_date, music_length=@music_length, priority=@priority " +
+                "priority=@priority " +
                 "WHERE ID=@id;";
 
-
-            cmd.Parameters.Add("id", (SqliteType)System.Data.DbType.Int32).Value = music.ID;
-            cmd.Parameters.Add("title", (SqliteType)System.Data.DbType.String).Value = music.title;
-            cmd.Parameters.Add("performer", (SqliteType)System.Data.DbType.String).Value = music.performer;
-            cmd.Parameters.Add("release_date", (SqliteType)System.Data.DbType.Int32).Value = music.release_date;
-            cmd.Parameters.Add("music_length", (SqliteType)System.Data.DbType.Int32).Value = music.music_length;
             cmd.Parameters.Add("priority", (SqliteType)System.Data.DbType.Int32).Value = music.priority;
 
 

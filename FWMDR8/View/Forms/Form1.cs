@@ -68,7 +68,7 @@ namespace FWMDR8
             }
 
             var Form2 = new Form2(musicController, music);
-            MessageBox.Show("musicGridView_CellContentClick executed!");
+            MessageBox.Show("Módosítsd a zenét!");
             Form2.ShowDialog();
 
         }
